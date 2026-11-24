@@ -13,6 +13,8 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.RenderingHints;
+import java.awt.Rectangle;
+import javax.swing.Scrollable;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
@@ -120,22 +122,23 @@ final class NetPulseWindow extends JFrame {
         root.add(buildHeader(), BorderLayout.NORTH);
         root.add(buildFooter(), BorderLayout.SOUTH);
 
-        JPanel content = new JPanel();
+        JPanel content = new DashboardContentPanel();
         content.setBackground(BACKGROUND);
         content.setBorder(new EmptyBorder(22, 2, 10, 2));
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.add(buildToolbar());
-        content.add(Box.createVerticalStrut(16));
-        content.add(buildErrorBanner());
-        content.add(Box.createVerticalStrut(15));
-        content.add(buildMetrics());
-        content.add(Box.createVerticalStrut(16));
-        content.add(buildAnalytics());
-        content.add(Box.createVerticalStrut(16));
-        content.add(buildDailyHistory());
-        content.add(Box.createVerticalStrut(10));
-        content.add(buildDataNote());
-        content.add(Box.createVerticalStrut(8));
+        content.setAlignmentX(Component.LEFT_ALIGNMENT);
+        addContentSection(content, buildToolbar());
+        addGap(content, 16);
+        addContentSection(content, buildErrorBanner());
+        addGap(content, 15);
+        addContentSection(content, buildMetrics());
+        addGap(content, 16);
+        addContentSection(content, buildAnalytics());
+        addGap(content, 16);
+        addContentSection(content, buildDailyHistory());
+        addGap(content, 10);
+        addContentSection(content, buildDataNote());
+        addGap(content, 8);
 
         JScrollPane scroll = new JScrollPane(content);
         scroll.setBorder(null);
@@ -144,6 +147,18 @@ final class NetPulseWindow extends JFrame {
         scroll.getVerticalScrollBar().setUnitIncrement(18);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         root.add(scroll, BorderLayout.CENTER);
+    }
+
+    private void addContentSection(JPanel content, javax.swing.JComponent section) {
+        section.setAlignmentX(Component.LEFT_ALIGNMENT);
+        section.setMaximumSize(new Dimension(Integer.MAX_VALUE, section.getPreferredSize().height));
+        content.add(section);
+    }
+
+    private void addGap(JPanel content, int height) {
+        javax.swing.JComponent gap = (javax.swing.JComponent) Box.createVerticalStrut(height);
+        gap.setAlignmentX(Component.LEFT_ALIGNMENT);
+        content.add(gap);
     }
 
     private JPanel buildHeader() {
@@ -692,6 +707,14 @@ final class NetPulseWindow extends JFrame {
         g.drawLine(size / 5, size * 3 / 4, size * 4 / 5, size * 3 / 4);
         g.dispose();
         return image;
+    }
+
+    private static final class DashboardContentPanel extends JPanel implements Scrollable {
+        @Override public Dimension getPreferredScrollableViewportSize() { return getPreferredSize(); }
+        @Override public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) { return 18; }
+        @Override public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return Math.max(18, visibleRect.height - 18); }
+        @Override public boolean getScrollableTracksViewportWidth() { return true; }
+        @Override public boolean getScrollableTracksViewportHeight() { return false; }
     }
 
     private static final class AdapterChoice {

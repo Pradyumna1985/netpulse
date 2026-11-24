@@ -1,8 +1,8 @@
 @echo off
 setlocal
 set "APP_DIR=%~dp0"
-if exist "%APP_DIR%dist\NetPulse\NetPulse.exe" (
-  start "" "%APP_DIR%dist\NetPulse\NetPulse.exe"
+if exist "%APP_DIR%dist-minimal\NetPulse\NetPulse.exe" (
+  start "" "%APP_DIR%dist-minimal\NetPulse\NetPulse.exe"
   exit /b 0
 )
 if not exist "%APP_DIR%build\input\NetPulse.jar" (

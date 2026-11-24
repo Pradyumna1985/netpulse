@@ -1,9 +1,3 @@
-## Download (Windows)
-
-Get NetPulse-Windows.zip from the [Releases page](https://github.com/Pradyumna1985/netpulse/releases), extract it, and run NetPulse\NetPulse.exe. Java is not required.
-
-Windows SmartScreen may warn because the file is unsigned: click "More info", then "Run anyway". NetPulse reads adapter statistics through PowerShell's Get-NetAdapterStatistics, so some antivirus tools may flag it by mistake.
-
 # NetPulse
 
 NetPulse is a Windows desktop network monitor written in Java. It reads the byte counters Windows reports for each network adapter, calculates the changes, and presents usage in both bits and bytes.
@@ -11,7 +5,7 @@ NetPulse is a Windows desktop network monitor written in Java. It reads the byte
 ## Quick start
 
 1. Open this folder in File Explorer.
-2. Double-click dist\NetPulse\NetPulse.exe.
+2. Double-click dist-minimal\NetPulse\NetPulse.exe.
 3. Select All adapters or a single network interface.
 4. Read received, sent, combined, today, and live speed figures on the dashboard.
 
@@ -29,7 +23,7 @@ The app image includes its Java runtime. You do not need to install Java to run 
 
 ## Build from source
 
-Install a JDK 17 or newer, then run build.ps1 from PowerShell. It compiles the app, creates build\input\NetPulse.jar, and, when jpackage is available, creates the self-contained Windows app under dist\NetPulse.
+Install a JDK 17 or newer, then run build.ps1 from PowerShell. It compiles the app, creates build\input\NetPulse.jar, uses jdeps to find the required Java modules, builds a compressed minimal runtime with jlink, and packages the self-contained Windows app under dist-minimal\NetPulse.
 
 You can also run run.bat after building.
 
